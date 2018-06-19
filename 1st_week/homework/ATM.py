@@ -12,7 +12,7 @@ accoutList = [
         {'accout':'442018002','name':'Bonus','passwd':'abcdef','balance':100.00},
         {'accout':'442018003','name':'Carrie','passwd':'hello','balance':200.00}]
 
-# 显示账户信息列表
+# 显示所有账户信息（管理员权限）
 def showAccout(accoutList):
     '''
     '''
@@ -22,78 +22,95 @@ def showAccout(accoutList):
     print("|{0:<10} | {1:<10} | {2:<10} | {3:<10}".format("accout",
         "name","passwd","balance"))
     print("-"*40)
-    for i in range(len(stulist)):
-        print("|{0:<5} | {1:<10} | {2:<5} | {3:<10}".format(i+1,
-            stulist[i]['name'],stulist[i]['age'],stulist[i]['classid']))
+    for i in range(len(accoutList)):
+        print("|{0:<10} | {1:<10} | {2:<10} | {3:<10}".format(accoutList[i]['accout'],
+            accoutList[i]['name'],"******",accoutList[i]['balance']))
     print("")
 
 # 登录界面
 def showLoginPage():
-    print("+-----------------------+")
-    print("+                       +")
-    print("+          ATM          +")
-    print("+                       +")
-    print("+-----------------------+")
-    print("        （请插卡）       ")
-    
+    print("+-------------------------------+")
+    print("+                               +")
+    print("+              ATM              +")
+    print("+                               +")
+    print("+-------------------------------+")
+    print("            （请插卡）           ")
+
+
 # 验证账号及密码
 def checkAccout(accout, passwd):
-    for item in accoutList:
-        if accout == item['accout'] and passwd == item['passwd']:
-            return True
-        else:
-            return False
+    for i in range(len(accoutList)):
+        if accout == accoutList[i]['accout'] and passwd == accoutList[i]['passwd']:
+            return i
+    # 没有匹配成功
+    return -1
 
 
 
 # 初始化界面
 def showMainPage():
 
-    print("="*12, "学员信息在线管理", "="*12)
-    print("{0:1} {1:13} {2:15}".format(" ", "1.查看学员信息", 
-        "2.添加学员信息"))
-    print("{0:1} {1:13} {2:15}".format(" ", "3.删除学员信息", 
+    print("")
+    print("="*13, "自动存取款系统", "="*13)
+    print("{0:1} {1:13} {2:15}".format(" ", "1.查询",
+        "2.取款"))
+    print("{0:1} {1:13} {2:15}".format(" ", "3.存款",
         "4.退出系统"))
     print("="*42)
+
+# 自动取款机业务
+def atmService(index):
+    key = input("请输入对应的选择：")
+    print("")
+    if key == "1":
+        print("="*14, "查询账户余额", "="*14)
+        #showAccout(accoutList)
+        print("> 账户姓名：", accoutList[index]['name'])
+        print("> 当前账户：", accoutList[index]['accout'])
+        print("> 当前余额：", accoutList[index]['balance'], end='\n\n')
+        return 0
+
+    elif key == "2":
+        print("="*14, "取款", "="*14)
+        money = input("请输入取款金额（元）：￥")
+        if int(money) > 0 and int(money) <= accoutList[index]['balance']:
+            accoutList[index]['balance'] -= int(money)
+            print("> 取款成功！*^_^*")
+            print("> 当前余额：", accoutList[index]['balance'], end='\n\n')
+            print("(I) 请取走现金并妥善保管")
+            return 0
+        else:
+            print("(E) 余额不足，取款失败")
+            return -1
+
+    elif key == "3":
+        print("="*14, "存款", "="*14)
+        money = input("> 存入金额（元）：￥")
+        accoutList[index]['balance'] += int(money)
+        print("> 存款成功！*^_^*")
+        print("> 当前余额：", accoutList[index]['balance'], end='\n\n')
+        return 0
+
+    elif key == "4":
+        print("="*18, "再见", "="*18)
+        return 1
+    else:
+        print("Try again!")
+        return -1
 
 
 # 开始啦
 showLoginPage()
 accout = input("请输入账号：")
 passwd = input("请输入密码：")
-if checkAccout(accout, passwd):
+index = checkAccout(accout, passwd)
+if index >= 0:
     print("(I) 登录成功")
+    while True:
+        showMainPage()
+        if 1 == atmService(index):
+            break
+        input("按回车键继续：")
 else:
     print("(I) 登录失败，请检查账号和密码")
-
-while True:
-    showMainPage()
-    key = input("请输入对应的选择：")
-    if key == "1":
-        print("="*14, "学员信息浏览", "="*14)
-        showStu(stulist)
-        input("按回车键继续：")
-    elif key == "2":
-        print("="*14, "学员信息添加", "="*14)
-        stu = {}
-        stu['name'] = input("请输入要添加的姓名：")
-        stu['age'] = input("请输入要添加的年龄：")
-        stu['classid'] = input("请输入要添加的班级号：")
-        stulist.append(stu)
-        print("(I) 添加成功")
-        input("按回车键继续：")
-    elif key == "3":
-        print("="*14, "学员信息删除", "="*14)
-        sid = input("请输入你要删除的信息id号：")
-        if int(sid) > 0 and int(sid) <= len(stulist):
-            del stulist[int(sid)-1]
-            print("(I) 删除成功")
-        else:
-            print("(E) 删除失败")
-        input("按回车键继续：")
-    elif key == "4":
-        print("="*18, "再见", "="*18)
-        break
-    else:
-        print("Try again!")
 
