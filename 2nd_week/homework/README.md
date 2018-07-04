@@ -3,6 +3,8 @@
 ## 作业1. 创建并导出 blogdb 数据库
 　　按要求创建 blogdb 数据库，并创建会员表 users 和博客文章表 blog，最后将其导出为 blogdb.sql 文件。
 
+![image](https://gitee.com/luhuadong/Python_Learning/blob/master/2nd_week/homework/images/2nd_week_homework_1.png)
+
 ```
 insert into blog(id,title,abstract,content,uid,cdate) values(201807001,'A',"AA","aa...aa",1001,curtime());
 ```
