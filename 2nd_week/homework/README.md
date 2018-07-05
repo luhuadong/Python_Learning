@@ -346,7 +346,7 @@ mysql> SELECT id, name FROM users;
 
 ```
 
-　　Fifi、James、Ken、Miruna 四个会员的信息确实被我们删除了。
+　　可以看到，Fifi、James、Ken、Miruna 四个会员的信息确实被我们删除了。
 
 　　如果想找回来，可以用作业1导出的 blogdb.sql 文件，重新导入到一个空的数据库。方法如下：
 
@@ -361,11 +361,193 @@ mysql -u root -p newdb < blogdb.sql
 ------
 
 
-## 作业3. 实现基于 MySQL 的学生信息管理系统
+## 作业3. 实现基于 MySQL 的【学生信息管理系统】
+
+**设计说明：**
+
+　　在这里我创建了 stu_info_system 数据库，用于保存学生信息管理系统的数据。完整的数据库文件（stu_info_system.sql）已提交到码云。
+
+```
+create database stu_info_system;
+
+use stu_info_system;
+```
+
+　　设计学生信息数据表的字段：
+
+![image](https://gitee.com/luhuadong/Python_Learning/raw/master/2nd_week/homework/images/student_info.png)
+
+　　创建 student_info 表：
+
+```
+create table student_info(
+  sid       int         unsigned not null auto_increment PRIMARY KEY,
+  name      varchar(32) not null,
+  gender    enum('male','female','unknown') not null default 'unknown',  
+  birthdate date        not null,
+  class     varchar(32) not null
+);
+```
+
+　　插入原始数据，一共3条记录：
+
+```
+insert into student_info  
+values(201807001,'Allen','male','1999-10-01','Python06'),
+(201807002,'Bonus','male','1999-12-25','Python07'),
+(201807003,'Carrie','female','2000-10-14','Python07');
+
+```
+
+　　最后，stu_info_system 数据库中的 student_info 数据表的情况如下：
+
+```
+mysql> SELECT * FROM student_info;
++-----------+--------+--------+------------+----------+
+| sid       | name   | gender | birthdate  | class    |
++-----------+--------+--------+------------+----------+
+| 201807001 | Allen  | male   | 1999-10-01 | Python06 |
+| 201807002 | Bonus  | male   | 1999-12-25 | Python07 |
+| 201807003 | Carrie | female | 2000-10-14 | Python07 |
++-----------+--------+--------+------------+----------+
+3 rows in set (0.00 sec)
+```
+
+
+**（1）编写stu表信息操作类：内有方法：构造方法实现数据库连接；析构方法关闭数据连接；**
+
+　　要求类中包含以下方法：
+
+ - findAll ( ) —— 查询方法
+ - del（id）—— 删除方法
+ - insert（data）—— 添加方法
+
+　　于是，我设计了 Stu_ops 类，名字的含义是 Student Operations。在这个类里面，我定义了 `__db`、`__cursor`、`__table` 和 `__log` 属性，这些属性都是私有属性，因为我不想让实例直接修改它们。其中，`__db` 保存的是数据库连接的对象，`__cursor` 保存游标，`__table` 用于保存要操作的数据表的名称，所以在对数据表进行增删改查之前一定要调用 `setTable()` 方法设置即将要操作的数据表。
+
+　　此外，我自作聪明地加了日志记录的功能，其中 `__log` 就是打开日志文件返回的文件 IO 对象。所有的操作都在类里面通过 `__record` 方法完成，默认的日志名称为 .student_mysql_xxx.log，后面的 xxx 是时间戳。也就是说，日志文件并不会自动覆盖，所以操作完之后需要手动删除日志文件。
+
+　　我定义了 `query()` 方法来执行所有的 SQL 语句，并实现事务提交或回滚的功能，`findAll()`、`delete()` 和 `insert()` 方法用于组合 SQL 语句，然后调用 `query()` 完成对数据库的操作。
+
+　　Stu_ops 类的骨架如下：
+
+```
+class Stu_ops:
+
+    # 定义属性
+    __table = ''
+
+    # 定义方法
+    # 构造方法
+    def __init__(self, user, passwd, db, host='localhost', port=3306):
+        pass
+
+    # 析构方法
+    def __del__(self):
+        pass
+
+    # 日志记录
+    def __record(self, log, timestamp=True, newline=True):
+        pass
+
+    # 获取日志文件名
+    def getLogName(self):
+        pass
+
+    # 设置数据表
+    def setTable(self, table):
+        pass
+
+    # 执行SQL语句并提交事务
+    def query(self, sql, log=True):
+        pass
+
+    # 查询方法
+    def findAll(self):
+        pass
+
+    # 删除方法
+    def delete(self, sid):
+        pass
+
+    # 添加方法
+    def insert(self, data):
+        pass
+
+    # 测试用的
+    def test(self):
+        pass
+
+```
+
+**（2）使用使用上面自定义stu表操作类，结合1.10的综合案例，做出增，删，查询操作。**
+
+　　注意：运行之前请根据您的实际情况修改代码中的 Stu_ops 实例化参数！！！
+
+```
+def main():
+    # 实例化
+    stu = Stu_ops(user='root', passwd='******', db='stu_info_system')
+    stu.setTable('student_info')
+```
+
+　　下面是一些操作界面，具体还请在您的环境中运行！
+
+```
+$ python3 student_mysql.py
+============ 学员信息在线管理 ============
+  1.查看学员信息      2.添加学员信息       
+  3.删除学员信息      4.退出系统         
+==========================================
+请输入对应的选择：1
+
+============== 学员信息浏览 ==============
++----------+----------+----------+-----+----------+
+| ID       | Name     | Gender   | Age | Class    |
++----------+----------+----------+-----+----------+
+| 201807001|     Allen|      male|   19|  Python06|
+| 201807002|     Bonus|      male|   19|  Python07|
+| 201807003|    Carrie|    female|   18|  Python07|
++----------+----------+----------+-----+----------+
+(I) 查询成功
+按回车键继续：
+
+============ 学员信息在线管理 ============
+  1.查看学员信息      2.添加学员信息       
+  3.删除学员信息      4.退出系统         
+==========================================
+请输入对应的选择：4
+
+================== 再见 ==================
+您可以查看日志：.student_mysql_1530785008.log
+
+```
+
+　　日志记录内容：
+```
+$ cat .student_mysql_1530785008.log
+== Log - Student Information Management System ==
+ + Thu Jul  5 18:03:28 2018
+ + 5.7.22-0ubuntu0.16.04.1
+ + stu_info_system
+ + root@localhost
+
+[1530785010.627949] >>> findAll()
+[1530785010.627964] SQL: "SELECT * FROM student_info"
+[1530785010.628829] Query OK, 3 rows affected
+
+```
+
 
 ------
 
-## 作业4. 飞机大战游戏
+## 作业4. 完成【飞机大战】游戏
+
+（1）完成敌机发射子弹功能（注意：子弹不是连发、移动速度不要太快）
+
+（2）实现敌机子弹和玩家飞机的碰撞检测
+
+（3）为消失的飞机添加爆炸效果
+
 
 ------
 
