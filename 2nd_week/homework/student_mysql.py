@@ -164,7 +164,7 @@ def showMainPage():
 def main():
 
     # 实例化
-    stu = Stu_ops(user='root', passwd='lu1010', db='stu_info_system')
+    stu = Stu_ops(user='root', passwd='******', db='stu_info_system')
     stu.setTable('student_info')
     #stu.test()
 
