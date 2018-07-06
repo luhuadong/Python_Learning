@@ -79,6 +79,7 @@ class HeroPlane:
 
         for b in self.bullet_list:
             b.display()
+            # 回收子弹
             if b.move(): self.bullet_list.remove(b)
 
         self.screen.blit(self.image, (self.x, self.y))
@@ -111,6 +112,13 @@ class HeroPlane:
         else:
             self.y += self.step
 
+    def over(self):
+        i = 0
+        while i < 4:
+            self.image = pygame.image.load('./images/bomb'+str(i+1)+'.png')
+            self.screen.blit(self.image, (self.x, self.y))
+            i += 1
+
 
 class EnemyBullet:
     def __init__(self, screen, x, y):
@@ -138,18 +146,18 @@ class EnemyPlane:
         self.bullet_list = []
         self.x = random.choice(range(408))
         self.y = -75
-        self.pipe_x = self.image.get_width()/2
+        self.pipe_x = self.image.get_width()/2-1 # 1 for the width of bullet
         self.pipe_y = self.image.get_height()
-        self.timer = threading.Timer(1, self.fire)
-        self.timer.start()
 
     def __del__(self):
-        self.timer.cancel()
+        pass
 
     def display(self):
         for b in self.bullet_list:
             b.display()
+            # 回收炮弹
             if b.move(): self.bullet_list.remove(b)
+
         self.screen.blit(self.image, (self.x, self.y))
 
     def move(self, hero):
@@ -157,20 +165,30 @@ class EnemyPlane:
         if self.y > height:
             return True
 
+        # 碰撞检测
         for bo in hero.bullet_list:
             if bo.x > self.x+12 and bo.x < self.x+92 and bo.y < self.y+60:
                 hero.bullet_list.remove(bo)
+                # 爆炸
+                self.over()
                 return True
+
+        # 看英雄机中弹了没
+        for bo in self.bullet_list:
+            if bo.x > hero.x+25 and bo.x < hero.x+75 and bo.y > hero.y+5 and bo.y < hero.y+50:
+                self.bullet_list.remove(bo)
+                hero.over()
 
     def fire(self):
         self.bullet_list.append(EnemyBullet(self.screen, self.x+self.pipe_x, self.y+self.pipe_y))
-        #self.timer.start()
-        print("Come on!")
-        threading.Timer(1, self.fire).start()
-        print("================")
         #print(len(self.bullet_list))
 
-
+    def over(self):
+        i = 0
+        while i < 4:
+            self.image = pygame.image.load('./images/bomb'+str(i+1)+'.png')
+            self.screen.blit(self.image, (self.x, self.y))
+            i += 1
 
 
 def check_event(hero):
@@ -232,10 +250,16 @@ def main():
         hero.display()
         check_event(hero)
 
+        # 随机绘制敌机
         if random.choice(range(50)) == 10:
             enemylist.append(EnemyPlane(screen))
+        # 遍历敌机并绘制移动
         for em in enemylist:
             em.display()
+            # 放炮弹
+            if random.choice(range(150)) == 10:
+                em.fire()
+            # 碰撞检测及回收炮弹
             if em.move(hero):
                 enemylist.remove(em)
 
