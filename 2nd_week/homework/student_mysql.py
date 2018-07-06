@@ -8,6 +8,7 @@
               请将其导入到您的数据库。
 '''
 
+import sys
 import pymysql
 import datetime
 import time
@@ -29,6 +30,7 @@ class Stu_ops:
         self.__record(" + %s" %time.asctime(time.localtime(time.time())), False)
 
         try:
+            # type(db): pymysql.connections.Connection, if connect failed, Null
             self.__db = pymysql.connect(host=host, user=user, password=passwd, db=db, charset='utf8')
             self.__cursor = self.__db.cursor()
             what  = self.query("SELECT VERSION()", log=False)
@@ -38,7 +40,8 @@ class Stu_ops:
         except Exception as err:
             self.__record("Can not connected to %s, reason: %s" %(db, err))
             self.__record("Exit ...\n")
-            exit(1)
+            #exit(1)
+            sys.exit()
 
 
     # 析构方法
@@ -46,8 +49,17 @@ class Stu_ops:
         """
             Disconnect database safely.
         """
-        self.__db.close()
-        self.__log.close()
+        try:
+            self.__db.close()
+
+        except:
+            print("(E) No pymysql.connections.Connection object")
+            print("(I) I'm sorry about that, please check PyMySQL connect args")
+            print("(I) For more details, see %s\n" %(self.__log.name))
+
+        finally:
+            self.__log.close()
+
 
 
     # 日志记录
@@ -216,7 +228,7 @@ def main():
         else:
             print("Try again!")
 
-        input("按回车键继续：")
+        input("按回车键继续 -> ")
         print("")
 
 
