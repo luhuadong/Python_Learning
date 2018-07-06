@@ -29,13 +29,18 @@ class Settings():
         self.bg_color = (230, 230, 230)
         self.bg_image = './images/bg2.jpg'
 
+        # 英雄机参数
+        self.move_step = 5
+
+        # 敌机参数
+
+
 # 定义游戏窗口大小，为背景图片的一半
 size = (width, height) = (512, 768)
 
-
 class Bullet:
     def __init__(self, screen, x, y):
-        self.x = x+53
+        self.x = x
         self.y = y
         self.screen = screen
         self.image = pygame.image.load('./images/pd.png')
@@ -47,46 +52,94 @@ class Bullet:
         self.screen.blit(self.image, (self.x, self.y))
 
     def move(self):
-        self.y -= 10
+        return True
+
+
+class HeroBullet(Bullet):
+    def __init__(self, screen, x, y):
+        super().__init__(screen, x, y)
+
+    def move(self):
+        self.y -= 10 # 英雄机子弹速度
         if self.y <= -20:
             return True
 
+
+class EnemyBullet(Bullet):
+    def __init__(self, screen, x, y):
+        super().__init__(screen, x, y)
+
+    def move(self):
+        self.y += 8 # 敌机子弹速度
+        if self.y >= height:
+            return True
+
+
+# 飞机基类
 class Plane:
-    def __init__(self, screen):
-        pass
+    def __init__(self, screen, style, geo):
+        self.screen = screen
+        self.image = pygame.image.load(style)
+        self.bullet_list = []
+        self.x = geo[0]
+        self.y = geo[1]
+        self.is_dead = False
+        self.finished = False
+        self.bomb_seq = ['4','3','2','1']
 
     def __del__(self):
         pass
 
+    def display(self):
+        for b in self.bullet_list:
+            b.display()
+            # 回收子弹
+            if b.move(): self.bullet_list.remove(b)
 
-class HeroPlane:
+        # 爆炸效果
+        if self.is_dead:
+            death_x = self.x
+            death_y = self.y
+            death_w = self.image.get_width()
+            death_h = self.image.get_height()
+            try:
+                bomb_image = './images/bomb'+self.bomb_seq.pop()+'.png'
+                self.image = pygame.image.load(bomb_image)
+            except:
+                self.image = pygame.image.load('./images/bomb4.png')
+                self.finished = True
+            finally:
+                x = death_x + (death_w - self.image.get_width())/2
+                y = death_y + (death_h - self.image.get_height())/2
+                self.screen.blit(self.image, (x, y))
+
+        else:
+            # 重新绘制飞机
+            self.screen.blit(self.image, (self.x, self.y))
+
+    def fire(self):
+        self.bullet_list.append(Bullet(self.screen, self.x, self.y))
+        print(len(self.bullet_list))
+
+    def over(self):
+        #print("Oops: plane over ...")
+        #del self
+        return self.finished
+
+
+class HeroPlane(Plane):
     def __init__(self, screen):
-        self.screen = screen
-        self.image = pygame.image.load('./images/me.png')
-        self.bullet_list = []
-        self.x = 200
-        self.y = 600
+        geo = (200, 600)
+        super().__init__(screen, './images/me.png', geo)
+
         self.step = 5
         self.limit_left = -(self.image.get_width()/2)+10
         self.limit_right = width-self.image.get_width()/2-10
         self.limit_top = 5
         self.limit_bottom = height-self.image.get_height()
 
-    def __del__(self):
-        pass
-
-    def display(self):
-
-        for b in self.bullet_list:
-            b.display()
-            # 回收子弹
-            if b.move(): self.bullet_list.remove(b)
-
-        self.screen.blit(self.image, (self.x, self.y))
-
     def fire(self):
-        self.bullet_list.append(Bullet(self.screen, self.x, self.y))
-        print(len(self.bullet_list))
+        self.bullet_list.append(HeroBullet(self.screen, self.x+53, self.y))
 
     def move_left(self):
         if self.x <= self.limit_left:
@@ -112,53 +165,15 @@ class HeroPlane:
         else:
             self.y += self.step
 
-    def over(self):
-        i = 0
-        while i < 4:
-            self.image = pygame.image.load('./images/bomb'+str(i+1)+'.png')
-            self.screen.blit(self.image, (self.x, self.y))
-            i += 1
 
-
-class EnemyBullet:
-    def __init__(self, screen, x, y):
-        self.x = x
-        self.y = y
-        self.screen = screen
-        self.image = pygame.image.load('./images/pd.png')
-
-    def __del__(self):
-        pass
-
-    def display(self):
-        self.screen.blit(self.image, (self.x, self.y))
-
-    def move(self):
-        self.y += 8
-        if self.y >= height:
-            return True
-
-
-class EnemyPlane:
+class EnemyPlane(Plane):
     def __init__(self, screen):
-        self.screen = screen
-        self.image = pygame.image.load('./images/e'+str(random.choice(range(3)))+'.png')
-        self.bullet_list = []
-        self.x = random.choice(range(408))
-        self.y = -75
+        geo = (random.choice(range(408)), -75)
+        enemy = './images/e'+str(random.choice(range(3)))+'.png'
+        super().__init__(screen, enemy, geo)
+
         self.pipe_x = self.image.get_width()/2-1 # 1 for the width of bullet
         self.pipe_y = self.image.get_height()
-
-    def __del__(self):
-        pass
-
-    def display(self):
-        for b in self.bullet_list:
-            b.display()
-            # 回收炮弹
-            if b.move(): self.bullet_list.remove(b)
-
-        self.screen.blit(self.image, (self.x, self.y))
 
     def move(self, hero):
         self.y += 4
@@ -166,29 +181,25 @@ class EnemyPlane:
             return True
 
         # 碰撞检测
+        if self.x > hero.x-50 and self.x < hero.x+50 and self.y > hero.y-40 and self.y < hero.y+40:
+            self.is_dead = True
+            hero.is_dead = True
+
+        # 看看我中弹了没
         for bo in hero.bullet_list:
             if bo.x > self.x+12 and bo.x < self.x+92 and bo.y < self.y+60:
                 hero.bullet_list.remove(bo)
                 # 爆炸
-                self.over()
-                return True
+                self.is_dead = True
 
-        # 看英雄机中弹了没
+        # 看看英雄机中弹了没
         for bo in self.bullet_list:
             if bo.x > hero.x+25 and bo.x < hero.x+75 and bo.y > hero.y+5 and bo.y < hero.y+50:
                 self.bullet_list.remove(bo)
-                hero.over()
+                hero.is_dead = True
 
     def fire(self):
         self.bullet_list.append(EnemyBullet(self.screen, self.x+self.pipe_x, self.y+self.pipe_y))
-        #print(len(self.bullet_list))
-
-    def over(self):
-        i = 0
-        while i < 4:
-            self.image = pygame.image.load('./images/bomb'+str(i+1)+'.png')
-            self.screen.blit(self.image, (self.x, self.y))
-            i += 1
 
 
 def check_event(hero):
@@ -223,9 +234,6 @@ def check_event(hero):
 
 def main():
 
-    # 背景图片
-    background_image = './images/bg2.jpg'
-
     # 初始化 Pygame
     pygame.init()
 
@@ -233,12 +241,14 @@ def main():
     screen = pygame.display.set_mode(size, 0, 0)
 
     # 在窗口中加载游戏背景
-    background = pygame.image.load(background_image)
+    background = pygame.image.load('./images/bg2.jpg')
 
+    # 创建英雄机
     hero = HeroPlane(screen)
 
-    bg_y = -(height)
+    play = True
     enemylist = []
+    bg_y = -(height)
 
     while True:
         # 从坐标(0, -768)开始绘图，所以看到的是背景图片的下半部
@@ -247,26 +257,49 @@ def main():
         if bg_y >= 0:
             bg_y = -(height)
 
-        hero.display()
+        if play:
+
+            # 绘制英雄机
+            hero.display()
+
+            # 随机绘制敌机
+            if random.choice(range(50)) == 10:
+                enemylist.append(EnemyPlane(screen))
+
+            # 遍历敌机并绘制移动
+            for em in enemylist:
+                em.display()
+
+                # 敌机随机发炮弹
+                if random.choice(range(150)) == 10:
+                    em.fire()
+
+                # 判断敌机是否出界
+                if em.move(hero):
+                    enemylist.remove(em)
+                # 判断敌机是否炸毁
+                if em.over():
+                    enemylist.remove(em)
+
+            # 英雄机炸毁，游戏结束
+            if hero.over():
+                play = False
+
+            #pygame.display.flip()
+            pygame.display.update()
+
+        else:
+            gameover = pygame.image.load('./images/gameover.jpg')
+            screen.blit(gameover, ((width-gameover.get_width())/2, (height-gameover.get_height())/2))
+            pygame.display.update()
+            #print("Game Over")
+            #continue
+
+        # 检查按键事件
         check_event(hero)
 
-        # 随机绘制敌机
-        if random.choice(range(50)) == 10:
-            enemylist.append(EnemyPlane(screen))
-        # 遍历敌机并绘制移动
-        for em in enemylist:
-            em.display()
-            # 放炮弹
-            if random.choice(range(150)) == 10:
-                em.fire()
-            # 碰撞检测及回收炮弹
-            if em.move(hero):
-                enemylist.remove(em)
-
-        #pygame.display.flip()
-        pygame.display.update()
-
         time.sleep(0.04)
+
 
 
 # 判断是否为主运行程序，是则调用 main()
