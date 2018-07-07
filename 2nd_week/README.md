@@ -22,9 +22,9 @@ finally:
 
 **Python 模块实战**
 
- - import 语句
- - from ... import 语句
- - __name__ 属性、包、自定义模块
+ - `import` 语句
+ - `from ... import` 语句
+ - `__name__` 属性、包、自定义模块
  - 第三方模块的安装和使用
 
 
