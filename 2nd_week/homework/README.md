@@ -548,6 +548,25 @@ $ cat .student_mysql_1530785008.log
 
 （3）为消失的飞机添加爆炸效果
 
+　　[飞机大战的代码在 aircraft_war 目录](https://gitee.com/luhuadong/Python_Learning/tree/master/2nd_week/homework/aircraft_war)
+
+　　已完成以下功能：
+
+ - 实现英雄机的上下左右移动和子弹发射
+ - 实现敌机的随机出现和敌机子弹的随机发射
+ - 实现敌机与英雄机的碰撞检测、子弹与飞机的碰撞检测
+ - 实现飞机被击中后的爆炸效果（通过 list 实现）
+ - 实现游戏结束后背景画面仍在滚动的效果
+ - 增加背景音乐
+
+　　以下是一些游戏画面截图：
+
+![image](https://gitee.com/luhuadong/Python_Learning/raw/master/2nd_week/homework/images/plane_play.png)
+
+![image](https://gitee.com/luhuadong/Python_Learning/raw/master/2nd_week/homework/images/plane_bomb.png)
+
+![image](https://gitee.com/luhuadong/Python_Learning/raw/master/2nd_week/homework/images/plane_over.png)
+
 
 ------
 
