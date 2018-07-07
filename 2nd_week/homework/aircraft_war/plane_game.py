@@ -21,29 +21,42 @@ import pygame
 from pygame.locals import *
 import threading
 
+# 全局的设置类
 class Settings():
 
     def __init__(self):
-        self.screen_width = 512
-        self.screen_height = 768
+        # 定义游戏窗口大小，为背景图片的一半
+        self.screen_size = (self.screen_width, self.screen_height) = (512, 768)
         self.bg_color = (230, 230, 230)
         self.bg_image = './images/bg2.jpg'
+        self.gameover_image = './images/gameover.jpg'
+        self.title = '飞机大战'
 
         # 英雄机参数
-        self.move_step = 5
+        self.move_step = 5 # 键盘控制的速度
+        self.hero_style = './images/me.png'
 
         # 敌机参数
+        self.enemy_speed = 4 # 敌机飞行速度
+        self.enemy_style_list = ['./images/e0.png', './images/e1.png', './images/e2.png']
+
+        # 子弹参数
+        self.bullet_style = './images/pd.png'
+        self.bullet_hero_v = 10 # 英雄机子弹速度
+        self.bullet_enemy_v = 8 # 敌机子弹速度
 
 
-# 定义游戏窗口大小，为背景图片的一半
-size = (width, height) = (512, 768)
+# 实例化设置对象
+settings = Settings()
 
+
+# 子弹基类
 class Bullet:
     def __init__(self, screen, x, y):
         self.x = x
         self.y = y
         self.screen = screen
-        self.image = pygame.image.load('./images/pd.png')
+        self.image = pygame.image.load(settings.bullet_style)
 
     def __del__(self):
         pass
@@ -55,23 +68,27 @@ class Bullet:
         return True
 
 
+# 英雄子弹类
 class HeroBullet(Bullet):
     def __init__(self, screen, x, y):
         super().__init__(screen, x, y)
 
     def move(self):
-        self.y -= 10 # 英雄机子弹速度
+        self.y -= settings.bullet_hero_v
+        # 判断子弹是否出界
         if self.y <= -20:
             return True
 
 
+# 敌机子弹类
 class EnemyBullet(Bullet):
     def __init__(self, screen, x, y):
         super().__init__(screen, x, y)
 
     def move(self):
-        self.y += 8 # 敌机子弹速度
-        if self.y >= height:
+        self.y += settings.bullet_enemy_v
+        # 判断子弹是否出界
+        if self.y >= settings.screen_height:
             return True
 
 
@@ -85,7 +102,7 @@ class Plane:
         self.y = geo[1]
         self.is_dead = False
         self.finished = False
-        self.bomb_seq = ['4','3','2','1']
+        self.bomb_seq = ['4','4','3','3','2','2','1','1']
 
     def __del__(self):
         pass
@@ -129,14 +146,16 @@ class Plane:
 
 class HeroPlane(Plane):
     def __init__(self, screen):
+        # 英雄机初始位置
         geo = (200, 600)
-        super().__init__(screen, './images/me.png', geo)
+        super().__init__(screen, settings.hero_style, geo)
 
-        self.step = 5
+        self.step = settings.move_step
+        # 英雄机移动范围
         self.limit_left = -(self.image.get_width()/2)+10
-        self.limit_right = width-self.image.get_width()/2-10
+        self.limit_right = settings.screen_width-self.image.get_width()/2-10
         self.limit_top = 5
-        self.limit_bottom = height-self.image.get_height()
+        self.limit_bottom = settings.screen_height-self.image.get_height()
 
     def fire(self):
         self.bullet_list.append(HeroBullet(self.screen, self.x+53, self.y))
@@ -169,15 +188,15 @@ class HeroPlane(Plane):
 class EnemyPlane(Plane):
     def __init__(self, screen):
         geo = (random.choice(range(408)), -75)
-        enemy = './images/e'+str(random.choice(range(3)))+'.png'
-        super().__init__(screen, enemy, geo)
+        enemy_style = settings.enemy_style_list[random.choice(range(3))]
+        super().__init__(screen, enemy_style, geo)
 
         self.pipe_x = self.image.get_width()/2-1 # 1 for the width of bullet
         self.pipe_y = self.image.get_height()
 
     def move(self, hero):
-        self.y += 4
-        if self.y > height:
+        self.y += settings.enemy_speed
+        if self.y > settings.screen_height:
             return True
 
         # 碰撞检测
@@ -238,24 +257,27 @@ def main():
     pygame.init()
 
     # 创建一个游戏窗口
-    screen = pygame.display.set_mode(size, 0, 0)
+    screen = pygame.display.set_mode(settings.screen_size, 0, 0)
+
+    # 设置窗口标题
+    pygame.display.set_caption(settings.title)
 
     # 在窗口中加载游戏背景
-    background = pygame.image.load('./images/bg2.jpg')
+    background = pygame.image.load(settings.bg_image)
 
     # 创建英雄机
     hero = HeroPlane(screen)
 
     play = True
     enemylist = []
-    bg_y = -(height)
+    bg_y = -(settings.screen_height)
 
     while True:
         # 从坐标(0, -768)开始绘图，所以看到的是背景图片的下半部
         screen.blit(background, (0, bg_y))
         bg_y += 2
         if bg_y >= 0:
-            bg_y = -(height)
+            bg_y = -(settings.screen_height)
 
         if play:
 
@@ -271,7 +293,7 @@ def main():
                 em.display()
 
                 # 敌机随机发炮弹
-                if random.choice(range(150)) == 10:
+                if random.choice(range(50)) == 10:
                     em.fire()
 
                 # 判断敌机是否出界
@@ -289,8 +311,9 @@ def main():
             pygame.display.update()
 
         else:
-            gameover = pygame.image.load('./images/gameover.jpg')
-            screen.blit(gameover, ((width-gameover.get_width())/2, (height-gameover.get_height())/2))
+            gameover = pygame.image.load(settings.gameover_image)
+            screen.blit(gameover, ((settings.screen_width-gameover.get_width())/2,
+                        (settings.screen_height-gameover.get_height())/2))
             pygame.display.update()
             #print("Game Over")
             #continue
