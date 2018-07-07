@@ -1,37 +1,43 @@
 # Python_Learning
 
 #### 项目介绍
-Python全栈
+本项目包含 Python 全栈工程师特训课程的相关练习和作业代码
 
-#### 软件架构
-软件架构说明
+以周（week）为目录进行编排，具体如下：
+
+** 模块一：Python 基础 **
+
+ - 第一周：Python 基础（上）
+ - 第二周：Python 基础（下）
+
+** 模块二：Web 开发 **
+
+ - 第三周：Python Web 开发基础（上）
+ - 第四周：Python Web 开发基础（下）
+ - 第五周：Python Web 开发项目实训（上）
+ - 第六周：Python Web 开发项目实训（下）
+
+** 模块三：爬虫技术 **
+
+ - 第七周：Python 网络爬虫基础（上）
+ - 第八周：Python 网络爬虫基础（下）
+ - 第九周：Python 网络爬虫进阶实战（上）
+ - 第十周：Python 网络爬虫进阶实战（中）
+ - 第十一周：Python 网络爬虫进阶实战（下）
+
+** 模块四：自动化运维技术 **
+
+ - 第十二周：Python 自动化运维技术实训（上）
+ - 第十三周：Python 自动化运维技术实训（下）
+
+** 模块五：数据挖掘与机器学习 **
+
+ - 第十四周：数据分析与机器学习基础（上）
+ - 第十五周：数据分析与机器学习基础（下）
+ - 第十六周：数据分析与机器学习实战（上）
+ - 第十七周：数据分析与机器学习实战（下）
 
 
-#### 安装教程
+具体内容的介绍在每个 week 目录的 README.md 文件进行说明。
+每个 week 目录中都有一个 homework 目录，用于存放当周的作业。
 
-1. xxxx
-2. xxxx
-3. xxxx
-
-#### 使用说明
-
-1. xxxx
-2. xxxx
-3. xxxx
-
-#### 参与贡献
-
-1. Fork 本项目
-2. 新建 Feat_xxx 分支
-3. 提交代码
-4. 新建 Pull Request
-
-
-#### 码云特技
-
-1. 使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2. 码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3. 你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4. [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5. 码云官方提供的使用手册 [http://git.mydoc.io/](http://git.mydoc.io/)
-6. 码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
