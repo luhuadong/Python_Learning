@@ -144,6 +144,7 @@ class Plane:
         return self.finished
 
 
+# 英雄飞机
 class HeroPlane(Plane):
     def __init__(self, screen):
         # 英雄机初始位置
@@ -185,6 +186,7 @@ class HeroPlane(Plane):
             self.y += self.step
 
 
+# 敌机
 class EnemyPlane(Plane):
     def __init__(self, screen):
         geo = (random.choice(range(408)), -75)
@@ -199,14 +201,14 @@ class EnemyPlane(Plane):
         if self.y > settings.screen_height:
             return True
 
-        # 碰撞检测
+        # 飞机的碰撞检测
         if self.x > hero.x-50 and self.x < hero.x+50 and self.y > hero.y-40 and self.y < hero.y+40:
             self.is_dead = True
             hero.is_dead = True
 
         # 看看我中弹了没
         for bo in hero.bullet_list:
-            if bo.x > self.x+12 and bo.x < self.x+92 and bo.y < self.y+60:
+            if bo.x > self.x+12 and bo.x < self.x+92 and bo.y < self.y+60 and bo.y > self.y:
                 hero.bullet_list.remove(bo)
                 # 爆炸
                 self.is_dead = True
