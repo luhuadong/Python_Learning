@@ -3,17 +3,17 @@
  Athor: 卢华东
  Email: luhuadong@163.com
  Date: 2018-07-06
- Description: 实现英雄机的上下左右移动和子弹发射，
-              实现敌机的向下移动和子弹发射，
-              实现子弹和飞机的碰撞检测，
-              实现碰撞后的爆炸效果，
-              增加计分功能，不同颜色的敌机分数不同，
-              每局游戏，玩家都获得三架英雄飞机，
-              如果敌机及其子弹碰到英雄机，玩家就会损失一架飞机
-              如果敌机飞离画面下方，玩家也会损失飞机
-              当玩家的三架飞机都用完时游戏介绍
+ Description: + 实现英雄机的上下左右移动和子弹发射
+              + 实现敌机的向下移动和子弹发射
+              + 实现子弹和飞机的碰撞检测
+              + 实现碰撞后的爆炸效果
+              - 增加计分功能，不同颜色的敌机分数不同，
+              - 每局游戏，玩家都获得三架英雄飞机，
+              - 如果敌机及其子弹碰到英雄机，玩家就会损失一架飞机
+              - 如果敌机飞离画面下方，玩家也会损失飞机
+              - 当玩家的三架飞机都用完时游戏结束
 
-              增加背景音乐
+              + 增加背景音乐
 """
 
 import sys, time, random
@@ -29,6 +29,8 @@ class Settings():
         self.screen_size = (self.screen_width, self.screen_height) = (512, 768)
         self.bg_color = (230, 230, 230)
         self.bg_image = './images/bg2.jpg'
+        # 不能播放 mp3，所以转成 wav
+        self.bg_music = './music/01.wav'
         self.gameover_image = './images/gameover.jpg'
         self.title = '飞机大战'
 
@@ -267,6 +269,11 @@ def main():
     # 在窗口中加载游戏背景
     background = pygame.image.load(settings.bg_image)
 
+    # 背景音乐
+    pygame.mixer.init()
+    pygame.mixer.music.load(settings.bg_music)
+    #pygame.mixer.music.play()
+
     # 创建英雄机
     hero = HeroPlane(screen)
 
@@ -275,6 +282,10 @@ def main():
     bg_y = -(settings.screen_height)
 
     while True:
+        if not pygame.mixer.music.get_busy():
+            print("play music")
+            pygame.mixer.music.play()
+
         # 从坐标(0, -768)开始绘图，所以看到的是背景图片的下半部
         screen.blit(background, (0, bg_y))
         bg_y += 2
