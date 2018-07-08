@@ -577,8 +577,25 @@ $ cat .student_mysql_1530785008.log
 
 　　自己蛋疼地设计了个连连看游戏，消除算法真的很蛋疼。。。
 
+　　完成设计之后，总结了该连连看游戏几个重点：
+
+ - 生成成对的图片元素
+ - 将图片元素打乱排布
+ - 定义什么才算“相连”（两张图片的连线不多于3跟直线，或者说转角不超过2个）
+ - 实现“相连”判断算法
+ - 消除图片元素并判断是否消除完毕
+
+
 　　[《连连看》的代码在 link_up 目录](https://gitee.com/luhuadong/Python_Learning/tree/master/2nd_week/homework/link_up)
 
+　　游戏开始：
+
 ![image](https://gitee.com/luhuadong/Python_Learning/raw/master/2nd_week/homework/images/link_up_play.png)
+
+　　点击图片，如果两张图片相同，并且能相连的就可以消除：
+
+![image](https://gitee.com/luhuadong/Python_Learning/raw/master/2nd_week/homework/images/link_up_playing.png)
+
+　　全部图片消除完毕就赢了：
 
 ![image](https://gitee.com/luhuadong/Python_Learning/raw/master/2nd_week/homework/images/link_up_win.png)
