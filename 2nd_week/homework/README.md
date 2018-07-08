@@ -548,10 +548,12 @@ $ cat .student_mysql_1530785008.log
 
 （3）为消失的飞机添加爆炸效果
 
-　　[飞机大战的代码在 aircraft_war 目录](https://gitee.com/luhuadong/Python_Learning/tree/master/2nd_week/homework/aircraft_war)
+　　[《飞机大战》的代码在 aircraft_war 目录](https://gitee.com/luhuadong/Python_Learning/tree/master/2nd_week/homework/aircraft_war)
 
-　　已完成以下功能：
+　　项目特点及完成功能：
 
+ - 增加 Settings 类用于保存游戏参数，方便后续扩展
+ - 增加 Bullet 基类和 Plane 基类，增加代码复用
  - 实现英雄机的上下左右移动和子弹发射
  - 实现敌机的随机出现和敌机子弹的随机发射
  - 实现敌机与英雄机的碰撞检测、子弹与飞机的碰撞检测
@@ -572,3 +574,11 @@ $ cat .student_mysql_1530785008.log
 
 
 ## 附加题. 连连看游戏
+
+　　自己蛋疼地设计了个连连看游戏，消除算法真的很蛋疼。。。
+
+　　[《连连看》的代码在 link_up 目录](https://gitee.com/luhuadong/Python_Learning/tree/master/2nd_week/homework/link_up)
+
+![image](https://gitee.com/luhuadong/Python_Learning/raw/master/2nd_week/homework/images/link_up_play.png)
+
+![image](https://gitee.com/luhuadong/Python_Learning/raw/master/2nd_week/homework/images/link_up_win.png)
