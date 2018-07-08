@@ -140,6 +140,8 @@ def horizontal_scan(points):
     leftLimit = 0;
     rightLimit = column-1
 
+    print("top:%d, bottom:%d, left:%d, right:%d" %(hLine1, hLine2, leftLimit, rightLimit))
+
 
     # 寻找左边界线
 
@@ -153,6 +155,8 @@ def horizontal_scan(points):
         # 当左边点为空时会继续扫面下一个左边点
         i -= 1
     leftLimit = i;
+    print("第一次扫描(left)")
+    print("top:%d, bottom:%d, left:%d, right:%d" %(hLine1, hLine2, leftLimit, rightLimit))
 
     # 第二次扫描
     i = p2_x
@@ -164,6 +168,9 @@ def horizontal_scan(points):
     # leftLimit 记录左边界线，该界线所在的点为空或p1、p2本身
     if i > leftLimit:
         leftLimit = i
+
+    print("第二次扫描(left)")
+    print("top:%d, bottom:%d, left:%d, right:%d" %(hLine1, hLine2, leftLimit, rightLimit))
 
     # 如果 leftLimit 为 0，说明p1、p2已经在外界接通了，直接返回
     if leftLimit == 0:
@@ -177,6 +184,9 @@ def horizontal_scan(points):
         i += 1
     rightLimit = i
 
+    print("第一次扫描(right)")
+    print("top:%d, bottom:%d, left:%d, right:%d" %(hLine1, hLine2, leftLimit, rightLimit))
+
     i = p2_x
     while i < column-1:
         if map_list[p2_y * column + i + 1] != 0:
@@ -186,27 +196,35 @@ def horizontal_scan(points):
     if i < rightLimit:
         rightLimit = i
 
+    print("第二次扫描(right)")
+    print("top:%d, bottom:%d, left:%d, right:%d" %(hLine1, hLine2, leftLimit, rightLimit))
+
     if rightLimit == column-1:
         return True    # Bug
 
     # 判断 leftLimit 和 rightLimit
     if leftLimit > rightLimit:
         # 如果左边界线超出右边界线，则无法连接
+        print("不能相连：leftLimit > rightLimit")
         return False
     else:
         # 从左往右扫描
         for i in range(leftLimit, rightLimit+1):
-            j = 0
+            print("从左往右扫描：%d -> %d"%(i, rightLimit))
+            j = hLine1 + 1
             for j in range(hLine1+1, hLine2):
+                print(" j=%d"%j)
                 # 只要当前列有阻碍，马上跳出
                 if map_list[j * column + i] != 0:
+                    # 回退一行
+                    #j -= 1
                     break
+                j += 1
             if j == hLine2:
+                print("最复杂的水平扫描成功！")
                 return True
 
         return False;
-
-    #return True
 
 
 
@@ -266,6 +284,9 @@ def vertical_scan(points):
         i -= 1 # 当上边点为空时会继续扫面下一个上边点
     topLimit = i
 
+    print("第一次扫描(top)")
+    print("top:%d, bottom:%d, left:%d, right:%d" %(topLimit, bottomLimit, vLine1, vLine2))
+
     # 第二次扫描
     i = p2_y
     while i > 0:
@@ -276,6 +297,9 @@ def vertical_scan(points):
     # topLimit 记录上边界线，该界线所在的点为空或p1、p2本身
     if i > topLimit:
         topLimit = i
+
+    print("第二次扫描(top)")
+    print("top:%d, bottom:%d, left:%d, right:%d" %(topLimit, bottomLimit, vLine1, vLine2))
 
     # 如果 topLimit 为 0，说明p1、p2已经在外界接通了，直接返回
     if topLimit == 0:
@@ -289,6 +313,9 @@ def vertical_scan(points):
         i += 1
     bottomLimit = i
 
+    print("第一次扫描(bottom)")
+    print("top:%d, bottom:%d, left:%d, right:%d" %(topLimit, bottomLimit, vLine1, vLine2))
+
     i = p2_y
     while i < row-1:
         if map_list[p2_x + (i+1) * column] != 0:
@@ -298,20 +325,32 @@ def vertical_scan(points):
     if i < bottomLimit:
         bottomLimit = i
 
+    print("第二次扫描(bottom)")
+    print("top:%d, bottom:%d, left:%d, right:%d" %(topLimit, bottomLimit, vLine1, vLine2))
+
     if bottomLimit == row-1:
         return True
 
     # 判断 topLimit 和 bottomLimit
     if topLimit > bottomLimit:
         # 如果上边界线超出下边界线，则无法连接
+        print("不能相连：topLimit > bottomLimit")
         return False
-    else: # 从上往下扫描
+    else:
+        # 从上往下扫描
         for i in range(topLimit, bottomLimit+1):
-            j = 0
+            print("从上往下扫描：%d -> %d"%(i, bottomLimit))
+            j = vLine1 + 1
             for j in range(vLine1+1, vLine2):
+                print(" j=%d"%j)
+                # 只要当前行有阻碍，马上跳出
                 if map_list[i * column + j] != 0:
+                    # 回退一列
+                    #j -= 1
                     break
+                j += 1
             if j == vLine2:
+                print("最复杂的垂直扫描成功！")
                 return True
 
         return False
