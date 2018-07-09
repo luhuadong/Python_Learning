@@ -65,15 +65,23 @@ class ImageBtn:
         # 描边
         """
         if self.__checked:
-            self.image = pygame.transform.laplacian(self.image)
+            #self.image = pygame.transform.laplacian(self.image)
+            pygame.draw.rect(self.image, (0,205,205), (0,0,self.image.get_width()-1,self.image.get_height()-1), 2)
         """
+
         """
         if not self.__checkable:
             self.image.fill((255, 255,240))
         """
+        if self.__checked:
+            pygame.draw.rect(self.image, (0,205,205,255), (0,0,self.image.get_width()-1,self.image.get_height()-1), 2)
+        else:
+            pygame.draw.rect(self.image, (0,205,205,0), (0,0,self.image.get_width()-1,self.image.get_height()-1), 2)
+
         self.screen.blit(self.image, (self.x, self.y))
 
     def hide(self):
+        self.__checked = False
         self.__checkable = False
         # 图片不可视
         #self.image.set_alpha(255)
@@ -252,13 +260,12 @@ def vertical_scan(points):
 
     print("Vertical Scanning ...")
 
-
     # 确保 p1 在 p2 的上边，或在同一条水平线上（非必要条件）
     """
-    if(p1.y > p2.y) {
-        point pt = p1;
-        p1 = p2;
-        p2 = pt;
+    if(p1_y > p2_y) {
+        pt_y = p1_y; pt_x = p1_x
+        p1_y = p2_y; p1_x = p2_x
+        p2_y = pt_y; p2_x = pt_x
     }
     """
 
