@@ -24,6 +24,8 @@ class Student(People):
 
 person = People("Rudy")
 print(person.getName())
+person.name = "Rudy Lo"
+print(person.getName())
 #print(person.name)
 
 stu = Student("Tina", "A+")
