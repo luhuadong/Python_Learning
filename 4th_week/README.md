@@ -10,8 +10,11 @@
 显示效果如下：
 
 ![图片](https://gitee.com/luhuadong/Python_Learning/raw/master/4th_week/images/homework_refer01.png)
+
 ![图片](https://gitee.com/luhuadong/Python_Learning/raw/master/4th_week/images/homework_refer02.png)
+
 ![图片](https://gitee.com/luhuadong/Python_Learning/raw/master/4th_week/images/homework_refer03.png)
+
 ![图片](https://gitee.com/luhuadong/Python_Learning/raw/master/4th_week/images/homework_refer04.png)
 
 **思路：**
