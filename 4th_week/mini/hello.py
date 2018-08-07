@@ -18,6 +18,7 @@ settings.configure(
 
 
 from django.conf.urls import url
+from django.core.wsgi import get_wsgi_application
 from django.http import HttpResponse
 
 
@@ -33,6 +34,8 @@ urlpatterns = (
     url(r'^$', index),
 )
 
+
+application = get_wsgi_application()
 
 # 典型的 Django 项目带有一个 manage.py 文件
 
