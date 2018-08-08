@@ -35,7 +35,12 @@ urlpatterns = (
 )
 
 
+# Web 服务器网关接口（WSGI）
+# 每一个服务器都需要使用一个正确定义的 WSGI 应用
+# Django 通过 get_wsgi_application 提供了一个用于创建这个应用的简单接口
+
 application = get_wsgi_application()
+
 
 # 典型的 Django 项目带有一个 manage.py 文件
 
