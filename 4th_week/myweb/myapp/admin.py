@@ -28,4 +28,3 @@ class StuAdmin(admin.ModelAdmin):
 	# 设置默认可编辑字段
 	#list_editable = ['age', 'sex', 'classid']
 
-
