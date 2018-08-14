@@ -3,6 +3,14 @@
 <head>
 	<meta charset="utf-8">
 	<title>相册信息管理</title>
+    <!--
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <script src="/static/bootstrap/js/jquery.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    -->
+
     <style>
         table tr td {
             text-align: center;
@@ -36,8 +44,8 @@
                     <td>{{ photo.id }}</td>
                     <td>{{ photo.title }}</td>
                     <td>
-                        <a href="../static/pics/{{ photo.filename }}" title="{{ photo.filename }}" target="_blank">
-                            <img src="../static/pics/s_{{ photo.filename }}" alt="{{ photo.filename }}">
+                        <a href="/static/pics/{{ photo.filename }}" title="{{ photo.filename }}" target="_blank">
+                            <img src="/static/pics/s_{{ photo.filename }}" alt="{{ photo.filename }}">
                         </a>
                     </td>
                     <td>{{ photo.comment }}</td>
