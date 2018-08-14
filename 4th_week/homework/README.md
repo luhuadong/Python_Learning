@@ -1,5 +1,7 @@
 ## 第四周作业
 
+本周作业代码位于 album 目录
+
 ### 0. 效果图
 
 ![](https://gitee.com/luhuadong/Python_Learning/raw/master/4th_week/homework/images/album_home.png)
