@@ -1,5 +1,11 @@
 # 第5周作业：商城后台
 
+### 作业说明
+
+Django 项目代码位于 shop 目录，shopdb.sql 为数据库导出文件。
+
+
+
 ### 截图
 
 ![](https://gitee.com/luhuadong/Python_Learning/raw/master/5th_week/homework/images/login.png)
