@@ -61,7 +61,31 @@ def info(request):
 
 def update(request):
     """ 执行修改会员信息 """
-    return HttpResponse("wait...")
+    context = loadinfo(request)
+
+    try:
+        ob = Users.objects.get(id=request.session['vipuser']['id'])
+        context['user'] = ob
+        ob.username = request.POST['username']
+        ob.name = request.POST['name']
+        ob.sex = request.POST['sex']
+        ob.phone = request.POST['phone']
+        ob.email = request.POST['email']
+        ob.address = request.POST['address']
+        ob.code = request.POST['code']
+        ob.save()
+        context['user'] = ob
+        print(ob.name)
+        #context={"info":"个人信息更新成功！"}
+        context['info'] = "个人信息更新成功！"
+    except Exception as err:
+        print(err)
+        #context={"info":"个人信息更新失败！"}
+        context['info'] = "个人信息更新失败！"
+
+    print(context['info'])
+    return render(request,"web/vipinfo.html", context)
+
 
 
 def resetps(request):

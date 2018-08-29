@@ -55,6 +55,16 @@
                         </div>
                         <br/>
 
+                        {% if info %}
+                            <div class="tip-box">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <i class="glyphicon glyphicon-exclamation-sign"></i>
+                                    <span class="tip-font">{{ info }}</span>
+                                    <span aria-hidden="true" class="cha">&times;</span>
+                                </button>
+                            </div>
+                        {% endif %}
+
                         <div class="input-group vipInput">
                             <span class="input-group-addon" id="basic-addon1">用户昵称</span>
                             <input type="text" class="form-control" name="username" maxlength="20" autocomplete="off" placeholder="#" value="{{ user.username }}" aria-describedby="basic-addon1" readonly="readonly">
@@ -67,7 +77,13 @@
 
                         <div class="input-group vipInput">
                             <span class="input-group-addon" id="basic-addon1">社会性别</span>
+                            {% comment %}
                             <input type="text" class="form-control" name="sex" placeholder="#" value="{% if user.sex == 0 %}女{% else %}男{% endif %}" aria-describedby="basic-addon1" readonly="readonly">
+                            {% endcomment %}
+                            <select class="form-control" name="sex" aria-describedby="basic-addon1" readonly="readonly">
+                                <option value="1" {% if user.sex == 1 %}selected="selected"{% endif %}>男</option>
+                                <option value="0" {% if user.sex == 0 %}selected="selected"{% endif %}>女</option>
+                            </select>
                         </div>
 
                         <div class="input-group vipInput">
@@ -92,7 +108,7 @@
 
                         <div class="input-group vipInput">
                             <span class="input-group-addon" id="basic-addon1">加入时间</span>
-                            <input type="text" class="form-control" name="addtime" placeholder="#" value="{{ user.addtime }}" aria-describedby="basic-addon1" readonly="readonly">
+                            <input type="text" class="form-control" name="addtime" placeholder="#" value="{{ user.addtime }}" aria-describedby="basic-addon1" readonly="readonly" disabled="disabled">
                         </div>
 
                         <br>
