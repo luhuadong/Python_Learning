@@ -22,6 +22,16 @@ def loadinfo(request):
 def index(request):
     ''' 项目前台首页 '''
     context = loadinfo(request)
+
+    # 获取商品列表中点击量前5作为热销商品（降序排列）
+    sellhot = Goods.objects.order_by("-clicknum")[:5]
+    print("热销商品")
+    num = 0
+    for good in sellhot:
+        num = num + 1
+        print("%02d: %s" %(num, good.goods))
+
+    context['sellhot'] = sellhot
     return render(request, "web/index.html", context)
 
 
