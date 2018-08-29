@@ -2,7 +2,9 @@
 
 ### 作业说明
 
-Django 项目代码位于 shop 目录，shopdb.sql 为数据库导出文件。
+Django 项目代码位于 myobject 目录，shopdb.sql 为数据库导出文件。
+
+> 如果运行出错，请与我联系！
 
 
 

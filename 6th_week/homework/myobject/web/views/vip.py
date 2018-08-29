@@ -126,6 +126,7 @@ def doresetps(request):
                 context = {"info": "密码修改成功，请退出重新登录！"}
         else:
             context = {"info": "原密码不正确！"}
+        context['user'] = ob
     except Exception as err:
         print(err)
         context={"info":"密码修改失败"}
