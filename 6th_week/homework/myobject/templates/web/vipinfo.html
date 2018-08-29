@@ -32,7 +32,7 @@
                         <a href="javascript:;" class="type-title"><span class="glyphicon glyphicon-user"
                                                                         aria-hidden="true"></span>个人中心</a>
                         <a href="{% url 'vip_info' %}" class="ml active">个人信息</a>
-                        <a href="#" class="ml ">修改密码</a>
+                        <a href="{% url 'vip_resetps' %}" class="ml ">修改密码</a>
                         <a href="#" class="ml ">地址管理</a>
                         <a href="#" class="ml ">我的收藏</a>
                         <a href="#" class="ml ">消息提醒</a>
@@ -43,7 +43,7 @@
                 <!-- 右侧内容展示 -->
                 <div class="right-content f-fr col-md-8 col-xs-12 col-sm-12" align="center">
                     <h3>
-                        Hello, {{ user.username }}
+                        Hello, {{ user.name }}
                     </h3>
                     <br>
 

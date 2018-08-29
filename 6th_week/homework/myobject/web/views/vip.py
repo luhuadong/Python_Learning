@@ -90,9 +90,43 @@ def update(request):
 
 def resetps(request):
     """ 重置密码表单 """
-    return HttpResponse("wait...")
+    try:
+        ob = Users.objects.get(id=request.session['vipuser']['id'])
+        context={"user":ob}
+        return render(request,"web/resetpass.html",context)
+    except Exception as err:
+        context={"info":"你还没设置密码！"}
+        return render(request,"web/resetpass.html",context)
 
 
 def doresetps(request):
     """ 执行重置密码 """
-    return HttpResponse("wait...")
+    try:
+        ob = Users.objects.get(id=request.session['vipuser']['id'])
+        #获取密码并md5
+        import hashlib
+        om = hashlib.md5()
+        om.update(bytes(request.POST['oldPassword'], encoding="utf8"))
+
+        nm = hashlib.md5()
+        nm.update(bytes(request.POST['newPassword'], encoding="utf8"))
+
+        if(ob.password == om.hexdigest()):
+            print("密码一致")
+            print("原密码：%s" % (request.POST['oldPassword']))
+            print("新密码：%s" % (request.POST['newPassword']))
+            print(om.hexdigest())
+            print(nm.hexdigest())
+
+            if(len(request.POST['newPassword']) < 3):
+                context = {"info": "密码不能少于3位"}
+            else:
+                ob.password = nm.hexdigest()
+                ob.save()
+                context = {"info": "密码修改成功，请退出重新登录！"}
+        else:
+            context = {"info": "原密码不正确！"}
+    except Exception as err:
+        print(err)
+        context={"info":"密码修改失败"}
+    return render(request,"web/resetpass.html",context)
