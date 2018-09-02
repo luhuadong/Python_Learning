@@ -2,6 +2,7 @@ from urllib import request, error
 import re, time, os, json
 
 txt_file = "result.txt"
+csv_file = "result.csv"
 
 def getPage(url):
     ''' 爬取指定url页面信息 '''
@@ -63,9 +64,11 @@ def main(offset):
 
 # 判断当前执行是否为主程序运行，并遍历调用主函数爬取数据
 if __name__ == '__main__':
+    # 删除原来的文件
     if os.path.exists(txt_file):
         os.remove(txt_file)
 
     for i in range(10):
         main(offset=i*10)
         time.sleep(0.5)
+

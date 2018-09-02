@@ -79,7 +79,10 @@ if __name__ == '__main__':
 
     for i in result_list:
         if i['标题']:
-            print(i)
+            print("标题："+i['标题'])
+            print("户型："+i['户型'])
+            print("价格："+i['价格'])
+            print("图片："+i['图片']+' \n')
         else:
             # 移除无效数据
             result_list.remove(i)
