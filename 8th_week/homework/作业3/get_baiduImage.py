@@ -2,7 +2,8 @@
 
 """
 
-import urllib.request import urlencode, urlretrieve
+from urllib.parse import urlencode
+from urllib.request import urlretrieve
 import requests
 import os, time
 
@@ -82,6 +83,13 @@ def getPage(offset):
 
     url = "https://image.baidu.com/search/acjson?" + urlencode(data)
 
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            return response.json()
+    except requests.ConnectionError:
+        return None
+
 
 
 def getImage(content):
@@ -93,7 +101,8 @@ def storeImage(item):
 
 
 def main():
-    pass
+    content = getPage(0)
+    print(content)
 
 
 
