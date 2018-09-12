@@ -19,7 +19,7 @@ from pyquery import PyQuery
 # https://book.douban.com/top250?start=25
 
 
-txt_file = "doubanTop250.txt"
+txt_file = "doubanBook250.txt"
 
 
 def getPage(index):
