@@ -114,19 +114,31 @@ def storeImage(item, localDir):
         urlretrieve(imageURL, savePath)
 
 
-def main(keyword):
+def main(keyword, page):
     """ 主程序，接收关键字，负责调度爬虫处理 """
 
-    for index in range(0, 7):
+    for index in range(0, int(page)):
         content = getPage(keyword, index*30)
         for item in getImage(content):
             print(item)
-            storeImage(item, './tmp')
+            storeImage(item, './' + keyword)
 
         print('-'*12)
         time.sleep(1)
 
+    print("\n图片保存在 './" + keyword + "' 目录")
+
 
 if __name__ == '__main__':
 
-    main('街拍')
+    print("\n 百度图片-爬虫程序（不输入则默认爬取2页'街拍'） \n")
+    keyword = input("请输入关键字：")
+    page = input("请输入爬取页数：")
+
+    if keyword and page:
+        print("\n 爬取关于“%s”的图片，共%s页...\n"%(keyword, page))
+        main(keyword, page)
+    else:
+        print("\n 默认操作...\n")
+        main('街拍', 2)
+
