@@ -22,7 +22,7 @@ class LoginSpider(scrapy.Spider):
 
         # 登录的表单信息，其中用户名与密码请自行输入正确值
         data = {
-            'email': '15899962740',
+            'email': '15899962704',
             'icode': '',
             'origURL': 'http://www.renren.com/home',
             'domain': 'renren.com',
@@ -56,6 +56,19 @@ class LoginSpider(scrapy.Spider):
             print("登录失败，原因是："+res['failDescription'])
         else:
             print("登录成功")
-            #print(response.selector.css("a.hd-name::text").extract())
+            url = res['homeUrl']
+            print("准备跳转到 %s"%(url))
+
+            # 获取主页面
+            yield scrapy.Request(url=url, callback=self.parseHome)
 
         print('='*64)
+
+    def parseHome(self, response):
+        """
+        登录成功后请求主页面的回调函数
+        """
+        print('+'*64)
+        username = response.selector.css("a.hd-name::text").extract_first()
+        print("您好，%s"%(username))
+
