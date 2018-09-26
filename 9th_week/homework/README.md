@@ -109,6 +109,25 @@ $ scrapy genspider pythonbook.py search.dangdang.com
 
 
 
+item 数据
+
+```python
+class DangdangItem(scrapy.Item):
+	'''
+      当当图书的Item 类，包含所有要爬取的信息
+    '''    
+    name        = scrapy.Field() # 书名
+    price       = scrapy.Field() # 价格
+    pic         = scrapy.Field() # 图片链接
+    author      = scrapy.Field() # 作者
+    publisher   = scrapy.Field() # 出版商
+    comments    = scrapy.Field() # 评论数量
+    pubdate     = scrapy.Field() # 发行日期
+    description = scrapy.Field() # 描述
+```
+
+运行爬虫之前，请导入 pythonbook.sql 到 MySQL
+
 
 
 

@@ -9,13 +9,13 @@ import scrapy
 
 
 class DangdangItem(scrapy.Item):
-	'''
-      DangdangItem 类，包含所有要爬取的信息
+    '''
+      当当图书的Item 类，包含所有要爬取的信息
     '''
 
     # define the fields for your item here like:
     # name = scrapy.Field()
-    
+
     name        = scrapy.Field() # 书名
     price       = scrapy.Field() # 价格
     pic         = scrapy.Field() # 图片链接
