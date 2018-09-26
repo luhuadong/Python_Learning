@@ -12,27 +12,27 @@ class LoginSpider(scrapy.Spider):
         '''
         人人网登录操作
         使用 yield 与 scrapy 的 FormRequest 提交用户登录信息，并使用回调方法访问 parse 来接下来处理返回的代码。
-        
+
         注意：测试时请使用您的用户名与密码
-        
+
         '''
 
         # 登录页面的 URL
-        login_url = 'http://www.renren.com/ajaxLogin/login?1=1&uniqueTimestamp=2018821943682'
+        login_url = 'http://www.renren.com/ajaxLogin/login?1=1&uniqueTimestamp=2018822125828'
 
         # 登录的表单信息，其中用户名与密码请自行输入正确值
         data = {
-        	'email': '15899962740',
+            'email': '15899962740',
             'icode': '',
             'origURL': 'http://www.renren.com/home',
             'domain': 'renren.com',
             'key_id': '1',
             'captcha_type': 'web_login',
-            'password': '636e86c68d31cee6fed50e4b11f30e34c47cdbdee9a150f67e1aa201fcd18ff6',
-            'rkey': '9f7775264b4cfba8c894b2e947e3a60c',
-            'f': 'http%3A%2F%2Fwww.renren.com%2F330188649%2Fprofile',
+            'password': '2c18e5058b11daacfa19994395734b2490de52f533def51d9eb68e009710a7b4',
+            'rkey': 'a30944a4db9c355ed88accbaeb6263b9',
+            'f': 'http%3A%2F%2Fzhibo.renren.com%2Ftop',
         }
-        
+
         yield scrapy.FormRequest(
             url = login_url,
             formdata = data,
@@ -49,7 +49,10 @@ class LoginSpider(scrapy.Spider):
         res = json.loads(response.text)
 
         print('='*64)
-        if(res['failDescription']):
+        print(res)
+
+        # 判断返回的JSON数据中是否存在名为'failDescription'的key
+        if 'failDescription' in res:
             print("登录失败，原因是："+res['failDescription'])
         else:
             print("登录成功")
