@@ -8,4 +8,6 @@
 
 class DemoPipeline(object):
     def process_item(self, item, spider):
+        print(item)
+        print('='*64)
         return item
