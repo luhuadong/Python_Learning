@@ -17,9 +17,10 @@ NEWSPIDER_MODULE = 'JD.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'JD (+http://www.yourdomain.com)'
+USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -52,9 +53,9 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'JD.middlewares.JdDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    'JD.middlewares.JdDownloaderMiddleware': 543,
+}
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -64,9 +65,9 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'JD.pipelines.JdPipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'JD.pipelines.JdPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -88,3 +89,18 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# 爬取的页数
+MAX_PAGE = 5
+
+# Selenium超时参数
+SELENIUM_TIMEOUT = 20
+
+# phantomjs浏览器参数设置
+PHANTOMJS_SERVICE_ARGS = ['--load-images=false', '--disk-cache=true']
+
+# MongoDB服务地址
+MONGO_URL = 'localhost'
+
+# 连接的MongoDB数据库
+MONGO_DB = 'jd'

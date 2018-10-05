@@ -11,4 +11,11 @@ import scrapy
 class JdItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    pass
+    
+    collection = 'products' # 集合的名字
+
+    title   = scrapy.Field() # 标题
+    price   = scrapy.Field() # 价格
+    pic     = scrapy.Field() # 图片url
+    comment = scrapy.Field() # 评论数
+    store   = scrapy.Field() # 商店
