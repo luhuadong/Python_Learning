@@ -25,7 +25,7 @@ class CsdnSlaveItem(scrapy.Item):
     price      = scrapy.Field()  # 价格
     desciption = scrapy.Field()  # 介绍
 
-
+"""
 class CsdnLoader(ItemLoader):
     # 对redis loader的设置
 
@@ -33,3 +33,4 @@ class CsdnLoader(ItemLoader):
     default_input_processor = MapCompose(lambda s: s.strip())
     default_output_processor = TakeFirst()
     description_out = Join()
+"""

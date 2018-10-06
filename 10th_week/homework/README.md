@@ -36,5 +36,11 @@ $ scrapy crawl laptop
 
 ### 作业2
 
+先执行 csdnMaster 爬虫，再执行 csdnSlave
+
+
+
+![](./images/homework2-RDM.png)
+
 
 
