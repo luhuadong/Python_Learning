@@ -6,7 +6,9 @@ import redis
 
 def main():
     #使用requests爬取所有豆瓣图书标签信息
-    url = "https://book.douban.com/tag/?view=type&icn=index-sorttags-all"
+    #url = "https://book.douban.com/tag/?view=type&icn=index-sorttags-all"
+    url = "https://book.douban.com/tag/"
+
     res = requests.get(url)
     print("status:%d" % res.status_code)
     html = res.content.decode('utf-8')
