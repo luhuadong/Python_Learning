@@ -53,9 +53,9 @@ DEFAULT_REQUEST_HEADERS = {
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'doubanSlave.middlewares.DoubanslaveDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    'doubanSlave.middlewares.DoubanslaveDownloaderMiddleware': 543,
+}
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -67,7 +67,7 @@ DEFAULT_REQUEST_HEADERS = {
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
 #    'doubanSlave.pipelines.DoubanslavePipeline': 300,
-    'doubanSlave.pipelines.RedisPipeline': 400,
+    'scrapy_redis.pipelines.RedisPipeline': 400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -107,3 +107,8 @@ SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderPriorityQueue'
 # REDIS_URL = 'redis://localhost:6379' # 一般情况可以省去
 REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
+
+#关闭终端输出，改输出到指定日志文件中
+#LOG_LEVEL= 'DEBUG'
+
+#LOG_FILE ='log.txt'

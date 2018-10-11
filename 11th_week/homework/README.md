@@ -1,8 +1,6 @@
 # 第11周作业说明
 
-MySQL 数据库
-
-
+**MySQL**： `doubandb` 数据库中的 `books` 数据表
 
 ```mysql
 CREATE TABLE `books` (                                            
@@ -26,9 +24,21 @@ CREATE TABLE `books` (
 
 
 
+---
 
 
-**模块1** 爬取豆瓣读书145个标签，Redis 键名为 `book:tag_urls`
+
+**模块1** 
+
+- 运行
+
+  ```
+  $ python3 load_tag_url.py 
+  status:200
+  共计写入tag：145个
+  ```
+
+- 爬取豆瓣读书145个标签，Redis 键名为 `book:tag_urls`
 
 ![](./images/RDM-book-tag_urls.png)
 
@@ -38,7 +48,7 @@ CREATE TABLE `books` (
 
 
 
-> 封 IP 提示：==检测到有异常请求从你的 IP 发出，请 [登录](https://www.douban.com/accounts/login?redir=https%3A%2F%2Fbook.douban.com%2Fsubject%2F26202093%2F) 使用豆瓣。==
+> 如果采用代理等反爬措施，很可能会出现封 IP 提示：==检测到有异常请求从你的 IP 发出，请 [登录](https://www.douban.com/accounts/login?redir=https%3A%2F%2Fbook.douban.com%2Fsubject%2F26202093%2F) 使用豆瓣。==
 
 
 
@@ -50,9 +60,23 @@ CREATE TABLE `books` (
 
 
 
+**web 数据展示**
+
+```
+$ python3 manage.py runserver
+```
 
 
-MySQL 数据表的导入与导出
+
+![](./images/豆瓣图书信息展示.png)
+
+
+
+---
+
+
+
+**MySQL 数据表的导入与导出**
 
 - 导入：`mysql -u root -p doubandb < douban.sql`
 - 导出：`mysqldump -u root -p doubandb > douban.sql`

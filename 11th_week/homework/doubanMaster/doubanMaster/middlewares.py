@@ -78,6 +78,8 @@ class DoubanmasterDownloaderMiddleware(object):
         # - or return a Request object
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
+        # 代理
+        request.meta['proxy'] = 'https://221.218.102.146:35217'
         return None
 
     def process_response(self, request, response, spider):

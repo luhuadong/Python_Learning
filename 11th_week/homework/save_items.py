@@ -9,16 +9,23 @@ def main():
     rediscli = redis.StrictRedis(host='127.0.0.1', port=6379, db=0)
 
     # 指定MySQL数据库信息
-    db = pymysql.connect(host="localhost",user="root",password="lu1010",db="doubandb",charset="utf8")
+    db = pymysql.connect(host="localhost",user="root",password="",db="doubandb",charset="utf8")
     #使用cursor()方法创建一个游标对象cursor
     cursor = db.cursor()
 
     while True:
         # FIFO模式为 blpop，LIFO模式为 brpop，获取键值
         source, data = rediscli.blpop(["slave_book:items"])
-        print(source)
+
+        if data:
+            print("***")
+            print(source)
+        else:
+            print("没有了")
+            break
+
         try:
-            item = json.loads(data)
+            item = json.loads(data.decode('utf-8'))
             #组装sql语句
             dd = dict(item)
             keys = ','.join(dd.keys())
