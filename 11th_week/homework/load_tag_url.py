@@ -9,14 +9,11 @@ def main():
     #url = "https://book.douban.com/tag/?view=type&icn=index-sorttags-all"
     url = "https://book.douban.com/tag/"
 
-    #proxy = '61.50.96.62:8080'
-    #proxy = '218.60.8.83:3129'
-    #proxy = '218.29.38.150:49737'
     proxy = '118.81.64.191:35302'
     proxies = {'http':'http://'+proxy, 'https':'https://'+proxy,}
 
-    res = requests.get(url, proxies=proxies)
-    #res = requests.get(url)
+    #res = requests.get(url, proxies=proxies)
+    res = requests.get(url)
     print("status:%d" % res.status_code)
     html = res.content.decode('utf-8')
 
