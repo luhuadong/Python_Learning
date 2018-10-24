@@ -28,3 +28,4 @@ def index(request, pIndex=1):
     print(context)
 
     return render(request, "monitor/index.html", context)
+
