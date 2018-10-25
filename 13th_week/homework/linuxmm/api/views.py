@@ -37,7 +37,7 @@ def get_host_stat(request):
     # 关闭连接
     ssh.close()
 
-    return HttpResponse(data)
+    return HttpResponse(data, content_type="application/json")
 
 
 def exec_remote_cmd(ssh, cmd):

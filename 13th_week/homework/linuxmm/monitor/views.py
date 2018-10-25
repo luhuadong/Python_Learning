@@ -29,3 +29,12 @@ def index(request, pIndex=1):
 
     return render(request, "monitor/index.html", context)
 
+
+def details(request):
+    return render(request, "monitor/details.html")
+
+def manual(request):
+    return render(request, "monitor/manual.html")
+
+def settings(request):
+    return render(request, "monitor/settings.html")

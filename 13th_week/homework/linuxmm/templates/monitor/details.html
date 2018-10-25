@@ -1,11 +1,213 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>详情-监控中心</title>
-</head>
-<body>
-    <h1>详情页</h1>
+{% extends "monitor/base.html" %}
+{% load static from staticfiles %}
 
-</body>
-</html>
+{% block mytitle %}
+    详情-LinuxMM监控中心
+{% endblock %}
+
+{% block mainbody %}
+
+    <ol class="breadcrumb">
+        <li><a href="{% url "index" %}">Home</a></li>
+        <li class="active">Details</li>
+    </ol>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-4">
+                <div class="panel panel-primary">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">详细信息</div>
+                    <table class="table">
+                        <tr>
+                            <td>标签</td>
+                            <td>阿里云</td>
+                        </tr>
+                        <tr>
+                            <td>IP地址</td>
+                            <td>120.78.197.79</td>
+                        </tr>
+                        <tr>
+                            <td>CPU核数</td>
+                            <td>4核</td>
+                        </tr>
+                        <tr>
+                            <td>CPU使用率</td>
+                            <td>2.3%</td>
+                        </tr>
+                        <tr>
+                            <td>内存大小</td>
+                            <td>4GB</td>
+                        </tr>
+                        <tr>
+                            <td>内存使用率</td>
+                            <td>58.2%</td>
+                        </tr>
+                        <tr>
+                            <td>硬盘大小</td>
+                            <td>40GB</td>
+                        </tr>
+                        <tr>
+                            <td>硬盘使用率</td>
+                            <td>16%</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-8">
+                <div id="main" style="height:400px"></div>
+                <!--
+                <div class="jumbotron">
+                    <h1>Hello, world!</h1>
+                    <p>...</p>
+                    <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
+                </div>
+                -->
+            </div>
+        </div>
+        <p>详情页</p>
+        <p>
+            <button type="button" id="getInfoBtn" class="btn btn-primary">获取信息</button>
+        </p>
+        <p id="showArea">here</p>
+    </div>
+
+
+    <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
+    <script type="text/javascript">
+
+        var now = Date.now(); // ES5获取时间戳
+        var dates = [
+            new Date(now-60000),
+            new Date(now-55000),
+            new Date(now-50000),
+            new Date(now-45000),
+            new Date(now-40000),
+            new Date(now-35000),
+            new Date(now-30000),
+            new Date(now-25000),
+            new Date(now-20000),
+            new Date(now-15000),
+            new Date(now-10000),
+            new Date(now-5000),
+            new Date(now)
+        ];
+        var xD = new Array(13);
+        for (var i=0; i<xD.length; i++) {
+            xD[i] = dates[i].getHours()+':'+dates[i].getMinutes()+':'+dates[i].getSeconds();
+        }
+        console.log(xD);
+
+        // 路径配置
+        require.config({
+            paths: {
+                echarts: 'http://echarts.baidu.com/build/dist'
+            }
+        });
+        // 使用
+        require(
+            [
+                'echarts',
+                'echarts/chart/line' // 使用柱状图就加载bar模块，按需加载
+            ],
+            function (ec) {
+                // 基于准备好的dom，初始化echarts图表
+                var myChart = ec.init(document.getElementById('main'));
+
+                /*
+                var option = {
+                    tooltip: {
+                        show: true
+                    },
+                    legend: {
+                        data:['销量']
+                    },
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            "name":"销量",
+                            "type":"line",
+                            "data":[5, 20, 40, 10, 10, 20]
+                        }
+                    ]
+                };
+                */
+
+                option = {
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data: ['总CPU使用率']
+                    },
+                    /*
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            mark: {show: true},
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    */
+                    calculable: true,
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            name: '时间',
+                            //data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                            data: xD
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '使用率',
+                            min: 0,
+                            max: 100
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '总CPU使用率',
+                            type: 'line',
+                            stack: '总量',
+                            data: [2.3, 1.8, 3.9, 2.3, 2.6, 2.3, 2.8, 5.6, 12.2, 9.6, 13.9, 12.4, 8.8]
+                        },
+                    ]
+                };
+
+                // 为echarts对象加载数据
+                myChart.setOption(option);
+            }
+        );
+    </script>
+
+
+{% endblock %}
+
+{% block myjs %}
+    console.log("我是详情页");
+
+    $("#getInfoBtn").click(function(){
+    console.log("clicked");
+    $.get("{% url "getHostStat" %}", function(result){
+    console.log(result);
+    $("#showArea").html(JSON.stringify(result));
+    });
+    });
+
+{% endblock %}
