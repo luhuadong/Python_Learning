@@ -114,35 +114,6 @@
                 // 基于准备好的dom，初始化echarts图表
                 var myChart = ec.init(document.getElementById('main'));
 
-                /*
-                var option = {
-                    tooltip: {
-                        show: true
-                    },
-                    legend: {
-                        data:['销量']
-                    },
-                    xAxis : [
-                        {
-                            type : 'category',
-                            data : ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
-                        }
-                    ],
-                    yAxis : [
-                        {
-                            type : 'value'
-                        }
-                    ],
-                    series : [
-                        {
-                            "name":"销量",
-                            "type":"line",
-                            "data":[5, 20, 40, 10, 10, 20]
-                        }
-                    ]
-                };
-                */
-
                 option = {
                     tooltip: {
                         trigger: 'axis'
@@ -194,20 +165,48 @@
                 myChart.setOption(option);
             }
         );
+        
+        function getInfo() {
+            $.ajax({
+                type:"GET",
+                url:"{% url 'getHostStat' %}",
+                dataType:"json",
+                async:true,
+                
+                beforeSend: function () {
+                    console.log("loading...");
+                },
+                
+                error: function () {
+                    console.log("error");
+                },
+                
+                success: function (result) {
+                    console.log(result);
+                    $("#showArea").html(JSON.stringify(result));
+                }
+            })
+        }
+        
     </script>
 
 
 {% endblock %}
 
 {% block myjs %}
+
+    /*
     console.log("我是详情页");
 
     $("#getInfoBtn").click(function(){
-    console.log("clicked");
-    $.get("{% url "getHostStat" %}", function(result){
-    console.log(result);
-    $("#showArea").html(JSON.stringify(result));
+        console.log("clicked");
+        $.get("{% url "getHostStat" %}", function(result){
+            console.log(result);
+            $("#showArea").html(JSON.stringify(result));
+        });
     });
-    });
+    */
+
+    getInfo();
 
 {% endblock %}
