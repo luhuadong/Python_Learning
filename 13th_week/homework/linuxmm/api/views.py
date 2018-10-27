@@ -18,7 +18,7 @@ CMD = {
 # Create your views here.
 
 
-def get_host_stat(request):
+def get_host_stat(request, ip4addr):
 
     ssh = paramiko.SSHClient()
     # 避免连接未知主机时出错
@@ -26,18 +26,18 @@ def get_host_stat(request):
 
     cmd_file = open("./static/run.py", "r")
     cmd = cmd_file.read()
-    print(cmd)
-    print('-' * 64)
 
     # 连接远程主机
-    ssh.connect(hostname="120.78.197.79", username="root", password="")
-
-    data = exec_remote_cmd(ssh, cmd)
-
-    # 关闭连接
-    ssh.close()
-
-    return HttpResponse(data, content_type="application/json")
+    try:
+        ssh.connect(hostname=ip4addr, username="root", timeout=4.5)
+    except:
+        data = "error"
+    else:
+        data = exec_remote_cmd(ssh, cmd)
+        # 关闭连接
+        ssh.close()
+    finally:
+        return HttpResponse(data, content_type="application/json")
 
 
 def exec_remote_cmd(ssh, cmd):

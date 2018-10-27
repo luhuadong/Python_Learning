@@ -21,82 +21,88 @@
                     <table class="table">
                         <tr>
                             <td>标签</td>
-                            <td>阿里云</td>
+                            <td>{{ host.tag }}</td>
                         </tr>
                         <tr>
                             <td>IP地址</td>
-                            <td>120.78.197.79</td>
+                            <td>{{ host.ip }}</td>
                         </tr>
                         <tr>
                             <td>CPU核数</td>
-                            <td>4核</td>
+                            <td><span id="cpu_count">{{ host.cpu }}</span>核</td>
                         </tr>
                         <tr>
                             <td>CPU使用率</td>
-                            <td>2.3%</td>
+                            <td><span id="cpu_percent">0</span>%</td>
                         </tr>
                         <tr>
                             <td>内存大小</td>
-                            <td>4GB</td>
+                            <td><span id="mem_total">{{ host.mem }}</span>GB</td>
                         </tr>
                         <tr>
                             <td>内存使用率</td>
-                            <td>58.2%</td>
+                            <td><span id="mem_percent">0</span>%</td>
                         </tr>
                         <tr>
                             <td>硬盘大小</td>
-                            <td>40GB</td>
+                            <td><span id="disk_total">{{ host.disk }}</span>GB</td>
                         </tr>
                         <tr>
                             <td>硬盘使用率</td>
-                            <td>16%</td>
+                            <td><span id="disk_percent">0</span>%</td>
                         </tr>
                     </table>
                 </div>
             </div>
             <div class="col-lg-9 col-md-8">
                 <div id="main" style="height:400px"></div>
-                <!--
-                <div class="jumbotron">
-                    <h1>Hello, world!</h1>
-                    <p>...</p>
-                    <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
-                </div>
-                -->
             </div>
         </div>
-        <p>详情页</p>
         <p>
-            <button type="button" id="getInfoBtn" class="btn btn-primary">获取信息</button>
+            <button type="button" id="getInfoBtn" class="btn btn-primary">手动更新</button>
         </p>
-        <p id="showArea">here</p>
+        <p id="showArea"> </p>
     </div>
 
 
     <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
     <script type="text/javascript">
 
-        var now = Date.now(); // ES5获取时间戳
-        var dates = [
-            new Date(now-60000),
-            new Date(now-55000),
-            new Date(now-50000),
-            new Date(now-45000),
-            new Date(now-40000),
-            new Date(now-35000),
-            new Date(now-30000),
-            new Date(now-25000),
-            new Date(now-20000),
-            new Date(now-15000),
-            new Date(now-10000),
-            new Date(now-5000),
-            new Date(now)
-        ];
-        var xD = new Array(13);
-        for (var i=0; i<xD.length; i++) {
-            xD[i] = dates[i].getHours()+':'+dates[i].getMinutes()+':'+dates[i].getSeconds();
+        var myChart;
+        var infoObj;
+        var cpuPoints = [0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var timer;
+
+        function zeroize(num, n) {
+            return (Array(n).join(0) + num).slice(-n);
         }
-        console.log(xD);
+
+        /* 返回横坐标时间轴，参数是时间间隔，单位秒 */
+        function getTimes(interval) {
+            var now = Date.now(); // ES5获取时间戳
+            var dates = [
+                new Date(now - interval*12*1000),
+                new Date(now - interval*11*1000),
+                new Date(now - interval*10*1000),
+                new Date(now - interval*9*1000),
+                new Date(now - interval*8*1000),
+                new Date(now - interval*7*1000),
+                new Date(now - interval*6*1000),
+                new Date(now - interval*5*1000),
+                new Date(now - interval*4*1000),
+                new Date(now - interval*3*1000),
+                new Date(now - interval*2*1000),
+                new Date(now - interval*1000),
+                new Date(now)
+            ];
+            var xD = new Array(13);
+            for (var i = 0; i < xD.length; i++) {
+                xD[i] = zeroize(dates[i].getHours(),2) + ':'
+                    + zeroize(dates[i].getMinutes(),2) + ':'
+                    + zeroize(dates[i].getSeconds(),2);
+            }
+            return xD;
+        }
 
         // 路径配置
         require.config({
@@ -112,35 +118,22 @@
             ],
             function (ec) {
                 // 基于准备好的dom，初始化echarts图表
-                var myChart = ec.init(document.getElementById('main'));
+                myChart = ec.init(document.getElementById('main'));
 
-                option = {
+                var option = {
                     tooltip: {
                         trigger: 'axis'
                     },
                     legend: {
                         data: ['总CPU使用率']
                     },
-                    /*
-                    toolbox: {
-                        show: true,
-                        feature: {
-                            mark: {show: true},
-                            dataView: {show: true, readOnly: false},
-                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-                            restore: {show: true},
-                            saveAsImage: {show: true}
-                        }
-                    },
-                    */
                     calculable: true,
                     xAxis: [
                         {
                             type: 'category',
                             boundaryGap: false,
                             name: '时间',
-                            //data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-                            data: xD
+                            data: getTimes({{ interval }})
                         }
                     ],
                     yAxis: [
@@ -156,7 +149,7 @@
                             name: '总CPU使用率',
                             type: 'line',
                             stack: '总量',
-                            data: [2.3, 1.8, 3.9, 2.3, 2.6, 2.3, 2.8, 5.6, 12.2, 9.6, 13.9, 12.4, 8.8]
+                            data: cpuPoints
                         },
                     ]
                 };
@@ -165,29 +158,94 @@
                 myChart.setOption(option);
             }
         );
-        
+
         function getInfo() {
+
             $.ajax({
-                type:"GET",
-                url:"{% url 'getHostStat' %}",
-                dataType:"json",
-                async:true,
-                
+                type: "GET",
+                url: "{% url 'getHostStat' host.ip %}",
+                dataType: "json",
+                async: true,
+
                 beforeSend: function () {
                     console.log("loading...");
                 },
-                
+
                 error: function () {
                     console.log("error");
+                    alert("{{ host.ip }} 用户的 SSH 连接失败\n请检查您的网络及相关设置！");
+                    clearInterval(timer);
                 },
-                
+
                 success: function (result) {
-                    console.log(result);
-                    $("#showArea").html(JSON.stringify(result));
+                    console.log('result: '+result);
+                    //$("#showArea").html(JSON.stringify(result));
+                    infoObj = JSON.parse(JSON.stringify(result));
+
+                    $("#cpu_count").html(infoObj.cpu_count);
+                    $("#cpu_percent").html(infoObj.cpu_percent);
+                    $("#mem_total").html(Math.round(infoObj.mem_total/1024/1024/1024));
+                    $("#mem_percent").html(infoObj.mem_percent);
+                    $("#disk_total").html(Math.round(infoObj.disk_total/1024/1024/1024));
+                    $("#disk_percent").html(infoObj.disk_percent);
+
+                    cpuPoints.shift();
+                    cpuPoints.push(infoObj.cpu_percent);
+                    //console.log(cpuPoints);
                 }
             })
         }
-        
+
+        function updateInfo() {
+            getInfo();
+
+            var option = {
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data: ['总CPU使用率']
+                    },
+                    calculable: true,
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            name: '时间',
+                            data: getTimes({{ interval }})
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '使用率',
+                            min: 0,
+                            max: 100
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '总CPU使用率',
+                            type: 'line',
+                            stack: '总量',
+                            data: cpuPoints
+                        },
+                    ]
+                };
+
+                // 为echarts对象加载数据
+                myChart.setOption(option);
+        }
+
+        $('#getInfoBtn').click(updateInfo);
+
+
+        $(function () {
+            getInfo();
+
+            timer = self.setInterval(updateInfo, {% widthratio interval 1 1000 %});
+        })
+
     </script>
 
 
@@ -195,18 +253,5 @@
 
 {% block myjs %}
 
-    /*
-    console.log("我是详情页");
-
-    $("#getInfoBtn").click(function(){
-        console.log("clicked");
-        $.get("{% url "getHostStat" %}", function(result){
-            console.log(result);
-            $("#showArea").html(JSON.stringify(result));
-        });
-    });
-    */
-
-    getInfo();
 
 {% endblock %}

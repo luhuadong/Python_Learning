@@ -3,6 +3,16 @@ from datetime import datetime
 
 # Create your models here.
 
+class User(models.Model):
+
+    username = models.CharField(max_length=32)
+    password = models.CharField(max_length=32)
+    email = models.CharField(max_length=32)
+
+    class Meta:
+        db_table = 'user' # 指定表名
+
+
 class Host(models.Model):
     ''' Host 数据表模型 '''
 
