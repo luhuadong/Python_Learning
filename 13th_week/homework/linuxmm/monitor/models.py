@@ -8,6 +8,7 @@ class User(models.Model):
     username = models.CharField(max_length=32)
     password = models.CharField(max_length=32)
     email = models.CharField(max_length=32)
+    cdate = models.DateTimeField(default=datetime.now)
 
     class Meta:
         db_table = 'user' # 指定表名

@@ -63,8 +63,13 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">用户中心 <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">登录</a></li>
-                        <li><a href="#">注册</a></li>
+                        {% if request.session.adminuser %}
+                            <li><a href="#">@{{ request.session.adminuser }}</a></li>
+                            <li><a href="{% url 'logout' %}">退出</a></li>
+                        {% else %}
+                            <li><a href="#">登录</a></li>
+                            <li><a href="#">注册</a></li>
+                        {% endif %}
                     </ul>
                 </li>
             </ul>

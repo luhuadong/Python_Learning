@@ -6,6 +6,7 @@ urlpatterns = [
 
     url(r'^login$',   views.login,   name="login"),
     url(r'^dologin$', views.dologin, name="dologin"),
+    url(r'^logout$',  views.logout,  name="logout"),
 
     url(r'^monitor/$', views.index, name='index'),
     url(r'^monitor/(?P<pIndex>[0-99]+)$', views.index, name='index'),

@@ -21,7 +21,7 @@ def index(request, pIndex=1):
     hostList = Host.objects.get_queryset().order_by('id')
 
     # 分页
-    p = Paginator(hostList, 10)
+    p = Paginator(hostList, 6)
     if pIndex == "":
         pIndex = "1"
     aList = p.page(pIndex)
@@ -133,9 +133,10 @@ def dologin(request):
 
         m = hashlib.md5()
         m.update(bytes(request.POST['password'], encoding="utf8"))
+        #print(m.hexdigest())
         if user.password == m.hexdigest():
             # 此处登录成功，将当前登录信息放入到session中，并跳转页面
-            request.session['adminuser'] = user.name
+            request.session['adminuser'] = user.username
             # print(json.dumps(user))
             return redirect(reverse('index'))
         else:
@@ -144,3 +145,10 @@ def dologin(request):
         print(err)
         context = {'info': '登录账号错误！'}
     return render(request, "login.html", context)
+
+
+def logout(request):
+    # 清除登录的session信息
+    del request.session['adminuser']
+    # 跳转登录页面（url地址改变）
+    return redirect(reverse('login'))
