@@ -114,7 +114,101 @@ $ python3 manage.py ruerver
 
 
 
+
+
 ---
 
 ### 作业二、Docker 分布式爬虫
+
+> 项目存放于 docker-spider 目录，执行下面的命令前请切换目录。
+
+
+
+#### 项目框图
+
+![](.images/Docker分布式爬虫框图.png)
+
+#### 1、Redis 容器
+
+拉取 Redis 镜像
+
+```shell
+docker pull redis:alpine
+```
+
+启动 Redis 容器（指定容器名称，设置数据卷，端口映射）
+
+```shell
+docker run -d --name redis -v /home/rudy/redis-data:/data -p 26379:6379 redis:alpine
+```
+
+
+
+#### 2、爬虫 Master 容器
+
+进入 master 目录
+
+```
+cd master/
+```
+
+构建镜像
+
+```
+docker build -t ao-master:v1.0 .
+```
+
+构建成功后，运行 ao-master 容器（设置数据卷，连接 redis）
+
+```shell
+docker run --rm -d -v $(pwd):/code --link redis ao-master:v1.0
+```
+
+
+
+#### 3、爬虫 Slave 容器
+
+进入 slave 目录
+
+```
+cd slave/
+```
+
+构建镜像
+
+```
+docker build -t ao-slave:v1.0 .
+```
+
+可以检查一下镜像
+
+```
+docker images
+REPOSITORY         TAG            IMAGE ID            CREATED             SIZE
+ao-slave           v1.0           f4489d78547c        2 minutes ago       300 MB
+ao-master          v1.0           25263b63e2bc        5 hours ago         83.5 MB
+redis              alpine         05635ee9e1c7        13 days ago         40.8 MB
+```
+
+运行 ao-slave 容器（设置数据卷，连接 redis）
+
+```shell
+docker run --rm -d -v $(pwd):/code --link redis ao-slave:v1.0
+```
+
+一切 OK 的话，此时爬虫已经工作起来了！
+
+打开 Redis Desktop Manager，连接 Host：127.0.0.1，Port：26379，查看 Redis 数据库中的数据：
+
+![](.images/Redis-aobag_customer-items.png)
+
+
+
+#### 4、Python Web 容器
+
+未实现
+
+
+
+
 
