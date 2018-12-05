@@ -25,6 +25,19 @@
 
 ### 作业
 
-（1）在 jupyter notebook 中实现 KNN 算法和 Decision Trees 算法，要求有完整的注释。
+（1）在 jupyter notebook 中实现 **KNN** 算法和 **Decision Trees** 算法，要求有完整的注释。
 
 （2）手写数字识别
+
+样本说明
+
+```
+digits/digits_images.npy  图像文件
+digits/digits_lable.npy   标签文件
+```
+
+样本中包含 1797 个手写数字灰度图像，每个图像大小为 8*8，可使用 `numpy.load('filename.npy')` 进行载入
+
+
+
+使用留出法拆分训练集与测试集，留出10%作为测试集。训练 KNN 模型，搜索最佳的超参数 k 和 n 的取值，提升识别准确度。
