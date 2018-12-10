@@ -1,6 +1,7 @@
 import numpy as np
 from collections import Counter
 
+
 def kNN_classify(X_train, y_train, x, k=5, p=2):
     ''' kNN分类器 '''
 
