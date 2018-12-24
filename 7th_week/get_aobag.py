@@ -53,7 +53,16 @@ url = "https://www.aobag.com/customer?cid="
 # max_cid@20181123 = 24762
 # max_cid@20181125 = 24780 before 我是未来
 # max_cid@20181125 = 25035 after 我是未来
-# max_cid@20181126 = 25175
+# max_cid@20181126 = 25192
+# max_cid@20181127 = 25351
+# max_cid@20181128 = 25422
+# max_cid@20181130 = 25628
+# max_cid@20181205 = 26090
+# max_cid@20181209 = 26294
+# max_cid@20181211 = 26405
+# max_cid@20181215 = 26749
+# max_cid@20181218 = 26984
+# max_cid@20181218 = 27255
 
 def getTitle(cid):
     req = request.Request(url + str(cid))
@@ -77,7 +86,7 @@ def getTitle(cid):
 
 if __name__ == '__main__':
     print("Go ...")
-    cid = 25175
+    cid = 27255
 
     #for cid in range(188, 288):
     while True:
