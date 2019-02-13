@@ -1,18 +1,29 @@
 import wx
+import random
+
+def lottery(event):
+	who = random.randint(1, 50)
+	print("来啊！", who)
+	numText.SetLabel(str(who)) 
 
 # 创建应用程序对象
 app = wx.App()
 
 # 创建一个窗口
-win = wx.Frame(None, title="老师的点名神器", size=(410, 335))
+win = wx.Frame(None, title="翻牌子", size=(400, 300))
+#win = wx.Frame(None, title="这个问题谁会", size=(400, 300), style=wx.MAXIMIZE_BOX | wx.CAPTION)
 
-#startBtn = wx.Button(win, label="开始", pos=(100, 100), size=(200, 80))
-loadBtn = wx.Button(win, label="Open", pos=(225, 5), size=(80, 25))
-saveBtn = wx.Button(win, label="Save", pos=(315, 5), size=(80, 25))
+#pnl = wx.Panel(win)
 
-filename = wx.TextCtrl(win, pos=(5, 5), size=(210, 25))
+numText = wx.StaticText(win, label="Who?", size=(400, 150), pos=(0, 50), style=wx.ALIGN_CENTER)
+font = numText.GetFont()
+font.PointSize += 60
+font = font.Bold()
+numText.SetFont(font)
 
-contents = wx.TextCtrl(win, pos=(5, 35), size=(390, 260), style=wx.TE_MULTILINE | wx.HSCROLL)
+startBtn = wx.Button(win, label="点名", size=(100, 50), pos=(150, 200))
+
+startBtn.Bind(wx.EVT_BUTTON, lottery)
 
 # 设置可见
 win.Show()
