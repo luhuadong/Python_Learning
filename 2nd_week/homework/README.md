@@ -9,7 +9,7 @@
 
 **（1）创建留言数据库 blogdb**
 
-```
+```mysql
 create database if not exists blogdb;
 
 use blogdb;
@@ -21,7 +21,7 @@ use blogdb;
 
 　　创建 users 表：
 
-```
+```mysql
 create table users(
     id    int         unsigned not null auto_increment PRIMARY KEY,
     name  varchar(32) not null unique,
@@ -30,7 +30,7 @@ create table users(
 );
 ```
 　　创建 blog 表：
-```
+```mysql
 create table blog(
     id       int          unsigned not null auto_increment PRIMARY KEY,
     title    varchar(100) not null,
@@ -177,7 +177,6 @@ mysql> select * from blog;
 ```
 mysqldump -u root -p blogdb > blogdb.sql
 ```
-
 
 ------
 
@@ -356,7 +355,6 @@ mysql> SELECT id, name FROM users;
 ```
 mysql -u root -p newdb < blogdb.sql
 ```
-
 
 ------
 
@@ -537,7 +535,6 @@ $ cat .student_mysql_1530785008.log
 
 ```
 
-
 ------
 
 ## 作业4. 完成【飞机大战】游戏
@@ -568,7 +565,6 @@ $ cat .student_mysql_1530785008.log
 ![image](https://gitee.com/luhuadong/Python_Learning/raw/master/2nd_week/homework/images/plane_bomb.png)
 
 ![image](https://gitee.com/luhuadong/Python_Learning/raw/master/2nd_week/homework/images/plane_over.png)
-
 
 ------
 
