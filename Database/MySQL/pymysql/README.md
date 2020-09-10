@@ -1,0 +1,6 @@
+
+
+```shell
+pip install PyMySQL
+```
+
